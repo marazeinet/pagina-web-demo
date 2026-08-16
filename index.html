@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brasa Viva — Parrilla a domicilio en Medellín | Demo Tech.360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="demo-ribbon">SITIO DEMO — construido por <b>Tech.360</b> para la Feria de Emprendimientos · Agosto 2026</div>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo"><span class="flame">🔥</span> Brasa Viva</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Inicio</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <div class="nav-right">
+      <a href="catalogo.html" class="cart-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        Pedido
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Parrilla a domicilio · Medellín</span>
+  <h1>Brasa que se <span class="accent">nota</span> desde la primera mordida</h1>
+  <p class="lead">Combos armados por un especialista de la parrilla, listos para asar. Pides hoy, te llega el mismo día en el área metropolitana.</p>
+  <div class="hero-actions">
+    <a href="catalogo.html" class="btn-primary">Ver combos</a>
+    <a href="nosotros.html" class="btn-ghost">Nuestra historia</a>
+  </div>
+  <div class="hero-strip">
+    <div><strong>+8 años</strong>en la parrilla</div>
+    <div><strong>Mismo día</strong>domicilio en Medellín</div>
+    <div><strong>100%</strong>selección propia de cortes</div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="trust">
+    <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Cortes seleccionados a diario</div>
+    <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>Domicilio en toda el área metropolitana</div>
+    <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Pedido listo en 24h</div>
+  </div>
+</div>
+
+<section class="section container">
+  <div class="section-head center">
+    <span class="eyebrow">Por qué Brasa Viva</span>
+    <h2>Cada combo pensado para que solo enciendas la parrilla</h2>
+  </div>
+  <div class="value-grid">
+    <div class="value-card">
+      <span class="num mono">01</span>
+      <h3>Porcionado listo</h3>
+      <p>Cada corte llega marinado y porcionado — sin trabajo extra antes de la parrilla.</p>
+    </div>
+    <div class="value-card">
+      <span class="num mono">02</span>
+      <h3>Domicilio el mismo día</h3>
+      <p>Pides antes de las 3pm y te llega hoy mismo en el área metropolitana.</p>
+    </div>
+    <div class="value-card">
+      <span class="num mono">03</span>
+      <h3>Selección propia</h3>
+      <p>Los cortes se seleccionan a diario, no hay inventario viejo dando vueltas.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-attr">
+      Sitio demo diseñado y desarrollado por <span class="grad">Tech.360</span> · así se ve un sitio web completo para tu negocio
+    </div>
+    <a href="https://wa.me/573107344780?text=Hola%2C%20vi%20la%20demo%20Brasa%20Viva%20en%20la%20feria%20y%20quiero%20un%20sitio%20as%C3%AD%20para%20mi%20negocio" target="_blank" class="footer-cta">Quiero uno para mi negocio →</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(link => {
+    link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+</script>
+
+</body>
+</html>

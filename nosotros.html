@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosotros — Brasa Viva | Demo Tech.360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="demo-ribbon">SITIO DEMO — construido por <b>Tech.360</b> para la Feria de Emprendimientos · Agosto 2026</div>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo"><span class="flame">🔥</span> Brasa Viva</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="nosotros.html" class="active">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <div class="nav-right">
+      <a href="catalogo.html" class="cart-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        Pedido
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero small">
+  <span class="eyebrow">Nosotros</span>
+  <h1 style="font-size:clamp(2rem,5vw,3.2rem);">De un puesto de barrio a domicilios en toda la ciudad</h1>
+  <p class="lead">Empezamos vendiendo combos los fines de semana en el barrio. Hoy seguimos armando cada combo con el mismo criterio de siempre — solo que ahora puedes pedirlo sin salir de casa.</p>
+</section>
+
+<section class="section container">
+  <div class="section-head">
+    <span class="eyebrow">Nuestra historia</span>
+    <h2>Cómo empezó Brasa Viva</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="yr mono">2017</span>
+      <div>
+        <h4>El primer domingo de venta</h4>
+        <p>Un puesto improvisado en la cuadra, vendiendo combos de parrilla los fines de semana para vecinos y conocidos.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="yr mono">2020</span>
+      <div>
+        <h4>El salto a los pedidos por WhatsApp</h4>
+        <p>Los pedidos empezaron a llegar por mensaje — el boca a boca del barrio se volvió el canal principal de ventas.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="yr mono">2023</span>
+      <div>
+        <h4>Domicilio en toda el área metropolitana</h4>
+        <p>De vender solo en la cuadra a llegar a cualquier punto de Medellín y sus alrededores el mismo día.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="yr mono">2026</span>
+      <div>
+        <h4>Un sitio propio, por fin</h4>
+        <p>Ya no se depende solo de mensajes sueltos por WhatsApp — ahora hay un catálogo claro, con precios y pedidos organizados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section container">
+  <div class="section-head center">
+    <span class="eyebrow">Cómo trabajamos</span>
+    <h2>Lo que no cambia, así crezcamos</h2>
+  </div>
+  <div class="value-grid">
+    <div class="value-card">
+      <span class="num mono">01</span>
+      <h3>Selección diaria</h3>
+      <p>Los cortes se escogen el mismo día — nada de inventario viejo dando vueltas en la nevera.</p>
+    </div>
+    <div class="value-card">
+      <span class="num mono">02</span>
+      <h3>Porciones pensadas para compartir</h3>
+      <p>Cada combo está armado para un número de personas real, no para adivinar cantidades.</p>
+    </div>
+    <div class="value-card">
+      <span class="num mono">03</span>
+      <h3>Respuesta rápida</h3>
+      <p>Si algo falta o cambia en tu pedido, te avisamos por WhatsApp antes de que salga el domicilio.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-attr">
+      Sitio demo diseñado y desarrollado por <span class="grad">Tech.360</span> · así se ve un sitio web completo para tu negocio
+    </div>
+    <a href="https://wa.me/573107344780?text=Hola%2C%20vi%20la%20demo%20Brasa%20Viva%20en%20la%20feria%20y%20quiero%20un%20sitio%20as%C3%AD%20para%20mi%20negocio" target="_blank" class="footer-cta">Quiero uno para mi negocio →</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(link => {
+    link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+</script>
+
+</body>
+</html>

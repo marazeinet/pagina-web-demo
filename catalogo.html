@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo — Brasa Viva | Demo Tech.360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="demo-ribbon">SITIO DEMO — construido por <b>Tech.360</b> para la Feria de Emprendimientos · Agosto 2026</div>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo"><span class="flame">🔥</span> Brasa Viva</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html" class="active">Catálogo</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <div class="nav-right">
+      <button class="cart-btn" id="cartBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        Pedido <span class="cart-count mono" id="cartCount">0</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero small">
+  <span class="eyebrow">El catálogo</span>
+  <h1 style="font-size:clamp(2rem,5vw,3.2rem);">Combos armados para tu próximo asado</h1>
+  <p class="lead">Cada combo trae la carne porcionada y lista — solo enciende la parrilla.</p>
+</section>
+
+<section class="section container">
+  <div class="grid" id="productGrid"></div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-attr">
+      Sitio demo diseñado y desarrollado por <span class="grad">Tech.360</span> · así se ve un sitio web completo para tu negocio
+    </div>
+    <a href="https://wa.me/573107344780?text=Hola%2C%20vi%20la%20demo%20Brasa%20Viva%20en%20la%20feria%20y%20quiero%20un%20sitio%20as%C3%AD%20para%20mi%20negocio" target="_blank" class="footer-cta">Quiero uno para mi negocio →</a>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="ticket-head">
+    <button class="close-cart" id="closeCart">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <span class="tag">PEDIDO Nº AUTO</span>
+    <h3>Tu recibo</h3>
+  </div>
+  <div class="ticket-body" id="ticketBody"></div>
+  <div class="ticket-foot">
+    <div class="ticket-total"><span>Total</span><span id="ticketTotal" class="mono">$0</span></div>
+    <button class="checkout-btn" id="checkoutBtn" disabled>Ir a pagar</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+const PRODUCTS = [
+  { id:1, name:"Combo Parrillero Clásico", desc:"Chorizo, morcilla, punta de anca y chicharrón. Para 4 personas.", price:95000, icon:"flame" },
+  { id:2, name:"Combo Costilla BBQ", desc:"Costilla de res marinada 24h en salsa BBQ de la casa. Para 3-4.", price:110000, icon:"flame" },
+  { id:3, name:"Combo Pollo a la Brasa", desc:"Pollo entero marinado en especias y limón, listo para asar.", price:62000, icon:"drum" },
+  { id:4, name:"Combo Mar y Tierra", desc:"Camarones al ajillo + punta de anca. Para compartir en pareja.", price:135000, icon:"fish" },
+  { id:5, name:"Combo Chorizo & Morcilla", desc:"12 unidades entre chorizo artesanal y morcilla, para picar.", price:48000, icon:"link" },
+  { id:6, name:"Combo Vegetariano a la Parrilla", desc:"Mazorca, papa criolla, champiñones y queso paipa para asar.", price:52000, icon:"leaf" },
+];
+
+const ICONS = {
+  flame: '<path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c0-1-.5-2-1-2 1 3-1 4-2 4a2 2 0 0 1-2-2c0-3 3-4 3-9z"/>',
+  drum: '<circle cx="12" cy="9" r="7"/><path d="M9 20l3-4 3 4M8 15l-3 5M16 15l3 5"/>',
+  fish: '<path d="M2 12s4-6 12-6 8 6 8 6-4 6-8 6-12-6-12-6z"/><circle cx="17" cy="10" r="1"/>',
+  link: '<rect x="3" y="9" width="8" height="6" rx="3"/><rect x="13" y="9" width="8" height="6" rx="3"/>',
+  leaf: '<path d="M11 3C6 3 3 8 3 13c5 0 10-3 10-10z"/><path d="M4 20 12 12"/>'
+};
+
+const fmt = n => "$" + n.toLocaleString("es-CO");
+let cart = {};
+
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = PRODUCTS.map((p,i) => `
+    <div class="product">
+      <span class="product-num mono">COMBO Nº${String(i+1).padStart(2,'0')}</span>
+      <div class="product-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${ICONS[p.icon]}</svg></div>
+      <h3>${p.name}</h3>
+      <p class="desc">${p.desc}</p>
+      <div class="product-footer">
+        <span class="price">${fmt(p.price)}</span>
+        <button class="add-btn" onclick="addToCart(${p.id})">Agregar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addToCart(id){ cart[id] = (cart[id] || 0) + 1; renderCart(); openCart(); }
+function removeFromCart(id){ delete cart[id]; renderCart(); }
+
+function renderCart(){
+  const body = document.getElementById('ticketBody');
+  const ids = Object.keys(cart);
+  const count = ids.reduce((sum,id) => sum + cart[id], 0);
+  document.getElementById('cartCount').textContent = count;
+
+  if(ids.length === 0){
+    body.innerHTML = '<div class="ticket-empty">Tu recibo está vacío.<br>Agrega un combo del catálogo.</div>';
+    document.getElementById('checkoutBtn').disabled = true;
+  } else {
+    body.innerHTML = ids.map(id => {
+      const p = PRODUCTS.find(x => x.id == id);
+      return `<div class="ticket-line">
+        <span><span class="qty">${cart[id]}×</span> ${p.name}</span>
+        <span style="display:flex; align-items:center; gap:10px;">${fmt(p.price * cart[id])}
+          <button onclick="removeFromCart(${id})">quitar</button></span>
+      </div>`;
+    }).join('');
+    document.getElementById('checkoutBtn').disabled = false;
+  }
+  const total = ids.reduce((sum,id) => sum + PRODUCTS.find(x => x.id == id).price * cart[id], 0);
+  document.getElementById('ticketTotal').textContent = fmt(total);
+}
+
+function openCart(){ document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); }
+function closeCartFn(){ document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
+document.getElementById('cartBtn').addEventListener('click', openCart);
+document.getElementById('closeCart').addEventListener('click', closeCartFn);
+document.getElementById('cartOverlay').addEventListener('click', closeCartFn);
+
+let selectedPay = null;
+function totalValue(){ return Object.keys(cart).reduce((sum,id) => sum + PRODUCTS.find(x => x.id == id).price * cart[id], 0); }
+function openCheckout(){ closeCartFn(); renderCheckoutForm(); document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+
+function renderCheckoutForm(){
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <span class="demo-tag">⚡ MODO DEMO — no se realiza ningún cobro real</span>
+    <h3>Finalizar pedido</h3>
+    <div class="field"><label>Nombre completo</label><input id="fName" placeholder="Tu nombre"></div>
+    <div class="field"><label>Teléfono</label><input id="fPhone" placeholder="300 123 4567"></div>
+    <div class="field"><label>Dirección de entrega</label><input id="fAddr" placeholder="Calle, número, barrio"></div>
+    <label style="display:block; font-size:0.76rem; color:var(--smoke); margin-bottom:9px; font-family:'JetBrains Mono',monospace;">Método de pago</label>
+    <div class="pay-options" id="payOptions">
+      <div class="pay-opt" data-pay="tarjeta">Tarjeta</div>
+      <div class="pay-opt" data-pay="nequi">Nequi</div>
+      <div class="pay-opt" data-pay="pse">PSE</div>
+    </div>
+    <div id="dynamicPayFields"></div>
+    <div class="ticket-total" style="color:var(--cream);"><span>Total a pagar</span><span class="mono">${fmt(totalValue())}</span></div>
+    <button class="checkout-btn" id="confirmPayBtn">Confirmar pedido (demo)</button>
+  `;
+  document.querySelectorAll('.pay-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected'); selectedPay = opt.dataset.pay;
+      document.getElementById('dynamicPayFields').innerHTML = renderMethodFields(selectedPay);
+    });
+  });
+  document.getElementById('confirmPayBtn').addEventListener('click', () => {
+    const name = document.getElementById('fName').value.trim();
+    if(!name || !selectedPay){ alert('Completa tu nombre y elige un método de pago para continuar con la demo.'); return; }
+    renderSuccess(name);
+  });
+}
+
+function renderMethodFields(method){
+  if(method === 'tarjeta'){
+    return `
+      <div class="field"><label>Número de tarjeta</label><input id="cardNumber" placeholder="4111 1111 1111 1111" maxlength="19"></div>
+      <div class="field-row">
+        <div class="field"><label>Vencimiento</label><input id="cardExp" placeholder="MM/AA" maxlength="5"></div>
+        <div class="field"><label>CVV</label><input id="cardCvv" placeholder="123" maxlength="4"></div>
+      </div>
+      <div class="field"><label>Nombre en la tarjeta</label><input id="cardName" placeholder="Como aparece en la tarjeta"></div>
+    `;
+  }
+  if(method === 'nequi'){
+    return `
+      <div class="field"><label>Número de celular Nequi</label><input id="nequiPhone" placeholder="300 000 0000" maxlength="12"></div>
+      <p class="pay-fields-hint">Te llegaría una notificación a tu app Nequi para aprobar el pago (demo — no se envía nada real).</p>
+    `;
+  }
+  if(method === 'pse'){
+    return `
+      <div class="field-row">
+        <div class="field"><label>Tipo de documento</label>
+          <select id="pseDocType">
+            <option>Cédula de ciudadanía</option>
+            <option>Cédula de extranjería</option>
+            <option>NIT</option>
+          </select>
+        </div>
+        <div class="field"><label>Número de documento</label><input id="pseDocNumber" placeholder="1020304050"></div>
+      </div>
+      <div class="field"><label>Banco</label>
+        <select id="pseBank">
+          <option>Bancolombia</option>
+          <option>Davivienda</option>
+          <option>Banco de Bogotá</option>
+          <option>BBVA Colombia</option>
+          <option>Banco Av Villas</option>
+          <option>Banco Caja Social</option>
+        </select>
+      </div>
+      <p class="pay-fields-hint">Te redirigiría al portal de tu banco para confirmar el pago (demo — no hay redirección real).</p>
+    `;
+  }
+  return '';
+}
+
+function renderSuccess(name){
+  const orderId = 'BV-' + Math.floor(1000 + Math.random()*9000);
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div class="success-view">
+      <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3>¡Pedido simulado confirmado, ${name.split(' ')[0]}!</h3>
+      <div class="order-id mono">Pedido ${orderId}</div>
+      <div class="success-note"><b>Esto es una demostración.</b> No se procesó ningún cobro real — así es exactamente el flujo de pago que Tech.360 construye para un negocio real, integrado con pasarelas como Wompi o PayU.</div>
+    </div>
+  `;
+  cart = {}; renderCart();
+}
+
+document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
+document.getElementById('modalOverlay').addEventListener('click', (e) => { if(e.target.id === 'modalOverlay') closeModal(); });
+
+renderProducts();
+renderCart();
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('#navLinks a').forEach(link => {
+  link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+</script>
+
+</body>
+</html>
